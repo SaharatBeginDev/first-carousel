@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            height: 500px;
+            background-color: lightgoldenrodyellow;
+            overflow: hidden;
+            position: relative;
+            margin-top: 50px;
+        }
+
+        .prevBtn,
+        .nextBtn {
+            border: none;
+            padding: 18px;
+            opacity: 0.6;
+            background-color: black;
+            color: white;
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        .prevBtn:hover,
+        .nextBtn:hover {
+            opacity: 1;
+        }
+
+        .prevBtn {
+            left: 0;
+        }
+
+        .nextBtn {
+            right: 0;
+        }
+
+        .sliders {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slider {
+            flex: 0 0 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider:nth-child(1) {
+            background-color: red;
+        }
+
+        .slider:nth-child(2) {
+            background-color: greenyellow;
+        }
+
+        .slider:nth-child(3) {
+            background-color: blue;
+        }
+
+        .slider:nth-child(4) {
+            background-color: yellow;
+        }
+
+        .indicators {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            border-radius: 50%;
+            background-color: lightgray;
+            cursor: pointer;
+        }
+
+        .indicator.active {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button class="prevBtn">&lt; Prev</button>
+        <div class="sliders">
+            <div class="slider">
+                <h1>Slide 1</h1>
+            </div>
+            <div class="slider">
+                <h1>Slide 2</h1>
+            </div>
+            <div class="slider">
+                <h1>Slide 3</h1>
+            </div>
+            <div class="slider">
+                <h1>Slide 4</h1>
+            </div>
+        </div>
+        <button class="nextBtn">Next &gt;</button>
+        <div class="indicators">
+            <div class="indicator" data-index="0"></div>
+            <div class="indicator" data-index="1"></div>
+            <div class="indicator" data-index="2"></div>
+            <div class="indicator" data-index="3"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let prevBtn = document.querySelector('.prevBtn');
+            let nextBtn = document.querySelector('.nextBtn');
+            let sliders = document.querySelector('.sliders');
+            let indicators = document.querySelectorAll('.indicator');
+            let index = 0;
+            let totalSlides = document.querySelectorAll('.slider').length;
+            let autoSlideInterval;
+
+            // Function to update slide position and indicators
+            function updateCarousel() {
+                sliders.style.transform = `translateX(${-100 * index}%)`;
+                indicators.forEach(indicator => {
+                    indicator.classList.remove('active');
+                });
+                indicators[index].classList.add('active');
+            }
+
+            // Function to handle next button click
+            nextBtn.addEventListener('click', () => {
+                // Disable next button for 0.5s to prevent rapid clicking
+                nextBtn.disabled = true;
+                setTimeout(() => {
+                    nextBtn.disabled = false;
+                }, 500);
+
+                // Move to next slide, reset to first slide if at last
+                if (index < totalSlides - 1) {
+                    index++;
+                } else {
+                    index = 0;
+                }
+                updateCarousel();
+            });
+
+            // Function to handle prev button click
+            prevBtn.addEventListener('click', () => {
+                // Disable prev button for 0.5s to prevent rapid clicking
+                prevBtn.disabled = true;
+                setTimeout(() => {
+                    prevBtn.disabled = false;
+                }, 500);
+
+                // Move to previous slide, go to last slide if at first
+                if (index > 0) {
+                    index--;
+                } else {
+                    index = totalSlides - 1;
+                }
+                updateCarousel();
+            });
+
+            // Indicator click functionality
+            indicators.forEach(indicator => {
+                indicator.addEventListener('click', (e) => {
+                    index = parseInt(e.target.getAttribute('data-index'));
+                    updateCarousel();
+                });
+            });
+
+            // Auto slide every 3 seconds
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(() => {
+                    if (index < totalSlides - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                    updateCarousel();
+                }, 3000);
+            }
+
+            // Stop auto slide when hovering
+            document.querySelector('.container').addEventListener('mouseenter', () => {
+                clearInterval(autoSlideInterval);
+            });
+
+            // Resume auto slide when leaving the carousel
+            document.querySelector('.container').addEventListener('mouseleave', () => {
+                startAutoSlide();
+            });
+
+            // Initial update and start auto slide
+            updateCarousel();
+            startAutoSlide();
+        });
+    </script>
+</body>
+
+</html>
