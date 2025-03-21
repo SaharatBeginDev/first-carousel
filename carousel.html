@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .container {
+            width: 1000px;
+            height: 500px;
+            background-color: lightgoldenrodyellow;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .prevBtn,
+        .nextBtn {
+            border: none;
+            padding: 18px;
+            opacity: 0.6;
+            background-color: black;
+            color: white;
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+
+        .prevBtn:hover,
+        .nextBtn:hover {
+            opacity: 1;
+        }
+
+        .prevBtn {
+            left: 0;
+        }
+
+        .nextBtn {
+            right: 0;
+        }
+
+        .sliders {
+            width: 4000px;
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slider {
+            width: 1000px;
+            height: 500px;
+            border: 1px solid red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slider:nth-child(1){background-color: red;}
+        .slider:nth-child(2){background-color: greenyellow;}
+        .slider:nth-child(3){background-color: blue;}
+        .slider:nth-child(4){background-color: yellow;}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button class="prevBtn">&lt; Prev</button>
+        <div class="sliders">
+            <div class="slider">
+                <h1>Slide 1 Hello world!</h1>
+            </div>
+            <div class="slider">
+                <h1>Slide 2 I'm Saharat</h1>
+            </div>
+            <div class="slider">
+                <h1>Slide 3 Web and Game developer</h1>
+            </div>
+            <div class="slider">
+                <h1>Slide 4 Thankyou!</h1>
+            </div>
+        </div>
+        <button class="nextBtn">Next &gt;</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let prevBtn = document.querySelector('.prevBtn');
+            let nextBtn = document.querySelector('.nextBtn');
+            let sliders = document.querySelector('.sliders');
+            let index = 0;
+
+            nextBtn.addEventListener('click', () => {
+                if (index > 2) {
+                    sliders.style.transform = 'translateX(0px)';
+                    index = 0;
+                } else {
+                    sliders.style.transform = `translateX(${-1000 * (index + 1)}px)`;
+                    index++;
+                    console.log(index)
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (index < 1) {
+                    sliders.style.transform = 'translateX(-3000px)';
+                    index = 3;
+                } else {
+                    sliders.style.transform = `translateX(${-1000 * (index - 1)}px)`;
+                    index--;
+                    console.log(index)
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
